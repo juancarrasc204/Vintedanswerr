@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickReply Vinted · Mensajes para Ofertas</title>
+    <style>
+        :root {
+            --vinted-teal: #017782;
+            --vinted-teal-hover: #015f67;
+            --vinted-teal-light: #e6f2f3;
+            --vinted-beige: #f8f5f0;
+            --vinted-white: #ffffff;
+            --vinted-dark: #2d2d2d;
+            --vinted-gray: #6b6b6b;
+            --vinted-light-gray: #e8e5e0;
+            --vinted-border: #e0dcd5;
+            --vinted-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --vinted-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.06);
+            --vinted-radius: 12px;
+            --vinted-radius-sm: 8px;
+            --vinted-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --toast-bg: #1a1a1a;
+            --toast-text: #ffffff;
+            --copied-bg: #e8f5e9;
+            --copied-text: #2e7d32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f1eb;
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(1, 119, 130, 0.04) 0%, transparent 70%),
+                radial-gradient(ellipse at 100% 100%, rgba(1, 119, 130, 0.03) 0%, transparent 60%);
+            color: var(--vinted-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ─── HEADER ─────────────────────────── */
+        .header {
+            background: var(--vinted-white);
+            border-bottom: 1px solid var(--vinted-border);
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--vinted-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            gap: 16px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--vinted-dark);
+        }
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--vinted-teal);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -0.5px;
+            flex-shrink: 0;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.3px;
+            color: var(--vinted-dark);
+        }
+        .logo-sub {
+            font-weight: 400;
+            font-size: 0.8rem;
+            color: var(--vinted-gray);
+            display: block;
+            line-height: 1;
+            margin-top: 1px;
+        }
+        .header-badge {
+            background: var(--vinted-teal-light);
+            color: var(--vinted-teal);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .header-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--vinted-teal);
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+
+        /* ─── MAIN ──────────────────────────── */
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 20px 60px;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .intro h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: var(--vinted-dark);
+            margin-bottom: 4px;
+        }
+        .intro p {
+            color: var(--vinted-gray);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ─── NUEVAS HERRAMIENTAS (ESPAÑOL) ─── */
+        .tools-section {
+            background: var(--vinted-white);
+            border: 1px solid var(--vinted-border);
+            border-radius: var(--vinted-radius);
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--vinted-shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .tools-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--vinted-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            flex-wrap: wrap;
+        }
+        .search-input {
+            flex: 1 1 260px;
+            padding: 10px 38px 10px 14px;
+            border: 1px solid var(--vinted-border);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: #faf9f6;
+            transition: border-color var(--vinted-transition), box-shadow var(--vinted-transition);
+            outline: none;
+        }
+        .search-input:focus {
+            border-color: var(--vinted-teal);
+            box-shadow: 0 0 0 3px rgba(1, 119, 130, 0.1);
+            background: #fff;
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+        .search-clear {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px 8px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: background var(--vinted-transition);
+            line-height: 1;
+        }
+        .search-clear.visible {
+            display: flex;
+        }
+        .search-clear:hover {
+            background: #eee;
+            color: #333;
+        }
+        .custom-msg-area {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+        .custom-msg-area label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--vinted-dark);
+        }
+        .custom-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--vinted-border);
+            border-radius: var(--vinted-radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            background: #faf9f6;
+            transition: border-color var(--vinted-transition), box-shadow var(--vinted-transition);
+            outline: none;
+        }
+        .custom-textarea:focus {
+            border-color: var(--vinted-teal);
+            box-shadow: 0 0 0 3px rgba(1, 119, 130, 0.1);
+            background: #fff;
+        }
+        .btn-custom-copy {
+            align-self: flex-end;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--vinted-teal);
+            color: #fff;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 22px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: -0.1px;
+            transition: background var(--vinted-transition), transform var(--vinted-transition),
+                box-shadow var(--vinted-transition);
+            white-space: nowrap;
+            font-family: inherit;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .btn-custom-copy:hover {
+            background: var(--vinted-teal-hover);
+            box-shadow: 0 2px 8px rgba(1, 119, 130, 0.3);
+        }
+        .btn-custom-copy:active {
+            transform: scale(0.96);
+        }
+        .btn-custom-copy.copied-state {
+            background: #4caf50;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+
+        /* ─── LANGUAGE SECTION ──────────────── */
+        .lang-section {
+            margin-bottom: 28px;
+        }
+        .lang-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-left: 2px;
+        }
+        .lang-flag {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .lang-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.3px;
+            color: var(--vinted-dark);
+            text-transform: capitalize;
+        }
+        .lang-count {
+            font-size: 0.78rem;
+            color: var(--vinted-gray);
+            background: var(--vinted-white);
+            padding: 3px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--vinted-border);
+            font-weight: 500;
+        }
+
+        /* ─── MESSAGE CARDS ─────────────────── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 14px;
+        }
+        .card {
+            background: var(--vinted-white);
+            border: 1px solid var(--vinted-border);
+            border-radius: var(--vinted-radius);
+            padding: 18px 20px;
+            box-shadow: var(--vinted-shadow);
+            transition: box-shadow var(--vinted-transition), border-color var(--vinted-transition),
+                transform var(--vinted-transition), opacity 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            cursor: default;
+        }
+        .card.hidden {
+            display: none;
+        }
+        .card:hover {
+            box-shadow: var(--vinted-shadow-hover);
+            border-color: #d0cbc3;
+            transform: translateY(-2px);
+        }
+        .card.copied-flash {
+            border-color: #4caf50 !important;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15) !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .card-message {
+            font-size: 0.93rem;
+            color: #3a3a3a;
+            line-height: 1.55;
+            flex: 1;
+            letter-spacing: -0.1px;
+            word-break: break-word;
+        }
+        .card-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .btn-copy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--vinted-teal);
+            color: #fff;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 22px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: -0.1px;
+            transition: background var(--vinted-transition), transform var(--vinted-transition),
+                box-shadow var(--vinted-transition);
+            white-space: nowrap;
+            font-family: inherit;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-copy:hover {
+            background: var(--vinted-teal-hover);
+            box-shadow: 0 2px 8px rgba(1, 119, 130, 0.3);
+            transform: translateY(-1px);
+        }
+        .btn-copy:active {
+            transform: scale(0.96);
+            transition: transform 0.1s ease;
+        }
+        .btn-copy.copied-state {
+            background: #4caf50;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+        .btn-copy svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+        .btn-label {
+            pointer-events: none;
+        }
+
+        /* ─── TOAST ─────────────────────────── */
+        .toast-container {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .toast {
+            background: var(--toast-bg);
+            color: var(--toast-text);
+            padding: 11px 22px;
+            border-radius: 26px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+            animation: toast-in 0.35s cubic-bezier(0.21, 1.02, 0.46, 1.1),
+                toast-out 0.3s cubic-bezier(0.55, 0, 1, 0.45) 1.8s forwards;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
+        .toast .check-icon {
+            width: 16px;
+            height: 16px;
+            color: #4caf50;
+            flex-shrink: 0;
+        }
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.92);
+            }
+        }
+
+        /* ─── FOOTER ────────────────────────── */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--vinted-gray);
+            font-size: 0.78rem;
+            border-top: 1px solid var(--vinted-border);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .footer a {
+            color: var(--vinted-teal);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─── RESPONSIVE ────────────────────── */
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .header-inner {
+                height: 52px;
+                padding: 0 4px;
+            }
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 15px;
+                border-radius: 8px;
+            }
+            .logo-text {
+                font-size: 1.05rem;
+            }
+            .logo-sub {
+                font-size: 0.7rem;
+            }
+            .header-badge {
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
+            .main {
+                padding: 20px 12px 50px;
+            }
+            .intro h2 {
+                font-size: 1.3rem;
+            }
+            .tools-section {
+                padding: 14px 16px;
+            }
+            .card {
+                padding: 14px 16px;
+                gap: 10px;
+            }
+            .card-message {
+                font-size: 0.88rem;
+            }
+            .btn-copy,
+            .btn-custom-copy {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+                border-radius: 20px;
+            }
+            .toast {
+                font-size: 0.8rem;
+                padding: 10px 18px;
+                border-radius: 22px;
+            }
+        }
+        @media (max-width: 380px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-badge {
+                display: none;
+            }
+            .intro h2 {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ─── HEADER ──────────────────────────── -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo-area" aria-label="QuickReply Vinted">
+                <div class="logo-icon">V</div>
+                <div>
+                    <span class="logo-text">QuickReply</span>
+                    <span class="logo-sub">para Vinted</span>
+                </div>
+            </a>
+            <div class="header-badge">
+                <span class="dot"></span> 16 mensajes listos
+            </div>
+        </div>
+    </header>
+
+    <!-- ─── MAIN CONTENT ───────────────────── -->
+    <main class="main">
+        <div class="intro">
+            <h2>📦 Respuestas rápidas para ofertas</h2>
+            <p>Haz clic en el botón para copiar el mensaje directamente al portapapeles. Pega en Vinted y listo.</p>
+        </div>
+
+        <!-- ═══ NUEVAS HERRAMIENTAS (ESPAÑOL) ═══ -->
+        <section class="tools-section" id="herramientas">
+            <h3>🛠️ Herramientas extra</h3>
+
+            <!-- Búsqueda -->
+            <div class="search-wrapper">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar mensaje... (ej: envío, mañana)" autocomplete="off">
+                <button class="search-clear" id="clearSearch" title="Limpiar búsqueda">✕</button>
+            </div>
+
+            <!-- Generador de mensaje personalizado -->
+            <div class="custom-msg-area">
+                <label for="customMessage">✏️ Mensaje personalizado (escribe y copia)</label>
+                <textarea id="customMessage" class="custom-textarea" placeholder="Escribe aquí tu propio mensaje..."></textarea>
+                <button class="btn-custom-copy" id="copyCustomBtn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span class="btn-label">Copiar mensaje</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ESPAÑOL -->
+        <section class="lang-section" id="es">
+            <div class="lang-header">
+                <span class="lang-flag">🇪🇸</span>
+                <span class="lang-name">Español</span>
+                <span class="lang-count">4 mensajes</span>
+            </div>
+            <div class="cards-grid" id="esGrid">
+                <div class="card" data-message="¡Hey! Me parece buena la oferta. Si lo pillas hoy, me va perfecto para enviarlo mañana junto a otros envíos que tengo. ¡Gracias! 😊">
+                    <p class="card-message">¡Hey! Me parece buena la oferta. Si lo pillas hoy, me va perfecto para enviarlo mañana junto a otros envíos que tengo. ¡Gracias! 😊</p>
+                    <div class="card-actions">
+                        <button class="btn-copy" aria-label="Copiar mensaje">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            <span class="btn-label">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card" data-message="¡Hola! Acepto tu oferta sin problemas. Si puedes formalizarlo hoy, lo envío mañana a primera hora. ¡Un saludo!">
+                    <p class="card-message">¡Hola! Acepto tu oferta sin problemas. Si puedes formalizarlo hoy, lo envío mañana a primera hora. ¡Un saludo!</p>
+                    <div class="card-actions">
+                        <button class="btn-copy" aria-label="Copiar mensaje">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            <span class="btn-label">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card" data-message="¡Buenas! Me interesa tu oferta. Si la haces efectiva hoy, puedo incluirlo en los envíos de mañana sin problema. 😊">
+                    <p class="card-message">¡Buenas! Me interesa tu oferta. Si la haces efectiva hoy, puedo incluirlo en los envíos de mañana sin problema. 😊</p>
+                    <div class="card-actions">
+                        <button class="btn-copy" aria-label="Copiar mensaje">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            <span class="btn-label">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card" data-message="¡Perfecto! Acepto la oferta. Si compras hoy, mañana mismo está en camino. Tengo varios envíos preparados. ¡Gracias! 🙌">
+                    <p class="card-message">¡Perfecto! Acepto la oferta. Si compras hoy, mañana mismo está en camino. Tengo varios envíos preparados. ¡Gracias! 🙌</p>
+                    <div class="card-actions">
+                        <button class="btn-copy" aria-label="Copiar mensaje">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            <span class="btn-label">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ITALIANO -->
+        <section class="lang-section" id="it">
+            <div class="lang-header">
+                <span class="lang-flag">🇮🇹</span>
+                <span class="lang-name">Italiano</span>
+                <span class="lang-count">4 messaggi</span>
+            </div>
+            <div class="cards-grid" id="itGrid">
+                <div class="card" data-message="Ciao! Mi sembra una buona offerta. Se riesci a prenderlo oggi, mi va perfetto per spedirlo domani insieme ad altri pacchi che devo inviare. Grazie! 😊">
+                    <p class="card-message">Ciao! Mi sembra una buona offerta. Se riesci a prenderlo oggi, mi va perfetto per spedirlo domani insieme ad altri pacchi che devo inviare. Grazie! 😊</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copia messaggio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copia</span></button></div>
+                </div>
+                <div class="card" data-message="Ciao! Accetto volentieri la tua offerta. Se riesci a completare oggi, spedisco domani mattina presto. Un saluto!">
+                    <p class="card-message">Ciao! Accetto volentieri la tua offerta. Se riesci a completare oggi, spedisco domani mattina presto. Un saluto!</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copia messaggio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copia</span></button></div>
+                </div>
+                <div class="card" data-message="Ciao! Mi interessa la tua offerta. Se la rendi effettiva oggi, posso includerla nelle spedizioni di domani. 😊">
+                    <p class="card-message">Ciao! Mi interessa la tua offerta. Se la rendi effettiva oggi, posso includerla nelle spedizioni di domani. 😊</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copia messaggio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copia</span></button></div>
+                </div>
+                <div class="card" data-message="Perfetto! Accetto l'offerta. Se acquisti oggi, domani stesso è in viaggio. Ho già diversi pacchi pronti. Grazie! 🙌">
+                    <p class="card-message">Perfetto! Accetto l'offerta. Se acquisti oggi, domani stesso è in viaggio. Ho già diversi pacchi pronti. Grazie! 🙌</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copia messaggio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copia</span></button></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FRANCÉS -->
+        <section class="lang-section" id="fr">
+            <div class="lang-header">
+                <span class="lang-flag">🇫🇷</span>
+                <span class="lang-name">Français</span>
+                <span class="lang-count">4 messages</span>
+            </div>
+            <div class="cards-grid" id="frGrid">
+                <div class="card" data-message="Salut ! Ton offre me semble bien. Si tu peux la finaliser aujourd'hui, ça m'arrange pour l'envoyer demain avec d'autres colis que j'ai à expédier. Merci ! 😊">
+                    <p class="card-message">Salut ! Ton offre me semble bien. Si tu peux la finaliser aujourd'hui, ça m'arrange pour l'envoyer demain avec d'autres colis que j'ai à expédier. Merci ! 😊</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copier le message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copier</span></button></div>
+                </div>
+                <div class="card" data-message="Bonjour ! J'accepte ton offre sans problème. Si tu finalises aujourd'hui, je l'envoie demain matin. Bonne journée !">
+                    <p class="card-message">Bonjour ! J'accepte ton offre sans problème. Si tu finalises aujourd'hui, je l'envoie demain matin. Bonne journée !</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copier le message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copier</span></button></div>
+                </div>
+                <div class="card" data-message="Coucou ! Ton offre m'intéresse. Si tu la confirmes aujourd'hui, je peux l'inclure dans mes envois de demain. 😊">
+                    <p class="card-message">Coucou ! Ton offre m'intéresse. Si tu la confirmes aujourd'hui, je peux l'inclure dans mes envois de demain. 😊</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copier le message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copier</span></button></div>
+                </div>
+                <div class="card" data-message="Parfait ! J'accepte l'offre. Si tu achètes aujourd'hui, c'est expédié demain. J'ai plusieurs colis prêts à partir. Merci ! 🙌">
+                    <p class="card-message">Parfait ! J'accepte l'offre. Si tu achètes aujourd'hui, c'est expédié demain. J'ai plusieurs colis prêts à partir. Merci ! 🙌</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copier le message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copier</span></button></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INGLÉS -->
+        <section class="lang-section" id="en">
+            <div class="lang-header">
+                <span class="lang-flag">🇬🇧</span>
+                <span class="lang-name">English</span>
+                <span class="lang-count">4 messages</span>
+            </div>
+            <div class="cards-grid" id="enGrid">
+                <div class="card" data-message="Hey! The offer looks good to me. If you can grab it today, it works perfectly for me to ship it tomorrow along with other packages I have. Thanks! 😊">
+                    <p class="card-message">Hey! The offer looks good to me. If you can grab it today, it works perfectly for me to ship it tomorrow along with other packages I have. Thanks! 😊</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copy message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copy</span></button></div>
+                </div>
+                <div class="card" data-message="Hi! I'm happy to accept your offer. If you can complete it today, I'll ship it first thing tomorrow morning. Cheers!">
+                    <p class="card-message">Hi! I'm happy to accept your offer. If you can complete it today, I'll ship it first thing tomorrow morning. Cheers!</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copy message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copy</span></button></div>
+                </div>
+                <div class="card" data-message="Hey there! I'm interested in your offer. If you make it effective today, I can include it in tomorrow's shipments. 😊">
+                    <p class="card-message">Hey there! I'm interested in your offer. If you make it effective today, I can include it in tomorrow's shipments. 😊</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copy message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copy</span></button></div>
+                </div>
+                <div class="card" data-message="Perfect! I accept the offer. If you buy today, it's on its way tomorrow. I've got several packages ready to go. Thank you! 🙌">
+                    <p class="card-message">Perfect! I accept the offer. If you buy today, it's on its way tomorrow. I've got several packages ready to go. Thank you! 🙌</p>
+                    <div class="card-actions"><button class="btn-copy" aria-label="Copy message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="btn-label">Copy</span></button></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ─── TOAST CONTAINER ────────────────── -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <!-- ─── FOOTER ─────────────────────────── -->
+    <footer class="footer">
+        <p>🚀 QuickReply para Vinted · Listo para subir a <a href="https://github.com" target="_blank" rel="noopener">GitHub</a> · Mensajes en 4 idiomas + herramientas extra</p>
+    </footer>
+
+    <!-- ─── SCRIPTS ────────────────────────── -->
+    <script>
+        (function() {
+            const toastContainer = document.getElementById('toastContainer');
+            let toastTimer = null;
+
+            function showToast(message) {
+                if (toastTimer) clearTimeout(toastTimer);
+                const existingToasts = toastContainer.querySelectorAll('.toast');
+                existingToasts.forEach(t => t.remove());
+
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    ${message}
+                `;
+                toastContainer.appendChild(toast);
+
+                toastTimer = setTimeout(() => {
+                    if (toast.parentNode) toast.remove();
+                    toastTimer = null;
+                }, 2200);
+            }
+
+            async function copyToClipboard(text) {
+                try {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(text);
+                        return true;
+                    }
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-9999px';
+                    textArea.style.top = '-9999px';
+                    textArea.style.opacity = '0';
+                    textArea.setAttribute('readonly', '');
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    textArea.setSelectionRange(0, text.length);
+                    const success = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    return success;
+                } catch (err) {
+                    console.warn('Error al copiar:', err);
+                    return false;
+                }
+            }
+
+            // Manejar copia de tarjetas predefinidas
+            async function handleCardCopy(card, button) {
+                const message = card.getAttribute('data-message');
+                if (!message) return;
+
+                const success = await copyToClipboard(message);
+                if (success) {
+                    const label = button.querySelector('.btn-label');
+                    const originalLabel = label.textContent;
+                    const svg = button.querySelector('svg');
+                    const originalSvgHTML = svg.outerHTML;
+
+                    button.classList.add('copied-state');
+                    card.classList.add('copied-flash');
+                    label.textContent = '¡Copiado!';
+                    svg.outerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    `;
+
+                    const langSection = card.closest('.lang-section');
+                    const langNameEl = langSection ? langSection.querySelector('.lang-name') : null;
+                    const langName = langNameEl ? langNameEl.textContent.trim() : '';
+                    const toastMsg = langName ? `Copiado en ${langName} ✓` : '¡Mensaje copiado! ✓';
+                    showToast(toastMsg);
+
+                    setTimeout(() => {
+                        button.classList.remove('copied-state');
+                        card.classList.remove('copied-flash');
+                        label.textContent = originalLabel;
+                        button.querySelector('svg').outerHTML = originalSvgHTML;
+                    }, 1500);
+                } else {
+                    showToast('⚠️ Error al copiar');
+                }
+            }
+
+            // Delegación para botones de tarjetas
+            document.addEventListener('click', function(e) {
+                const button = e.target.closest('.btn-copy');
+                if (!button) return;
+                if (button.classList.contains('copied-state')) return;
+                const card = button.closest('.card');
+                if (!card) return;
+                e.preventDefault();
+                handleCardCopy(card, button);
+            });
+
+            // ─── NUEVAS FUNCIONALIDADES ─────────────────
+            // 1. Búsqueda en tiempo real
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            const allCards = document.querySelectorAll('.card');
+            const langSections = document.querySelectorAll('.lang-section');
+
+            function filterCards(query) {
+                const normalizedQuery = query.toLowerCase().trim();
+                let visibleCount = 0;
+
+                allCards.forEach(card => {
+                    const message = card.getAttribute('data-message') || '';
+                    if (normalizedQuery === '' || message.toLowerCase().includes(normalizedQuery)) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                // Ocultar secciones de idioma si no tienen tarjetas visibles
+                langSections.forEach(section => {
+                    const visibleCards = section.querySelectorAll('.card:not(.hidden)');
+                    if (visibleCards.length === 0) {
+                        section.style.display = 'none';
+                    } else {
+                        section.style.display = ''; // restablecer
+                    }
+                });
+
+                // Mostrar/ocultar botón de limpiar
+                if (normalizedQuery !== '') {
+                    clearSearchBtn.classList.add('visible');
+                } else {
+                    clearSearchBtn.classList.remove('visible');
+                }
+            }
+
+            searchInput.addEventListener('input', function(e) {
+                filterCards(this.value);
+            });
+
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                filterCards('');
+                searchInput.focus();
+            });
+
+            // 2. Copiar mensaje personalizado
+            const customTextarea = document.getElementById('customMessage');
+            const copyCustomBtn = document.getElementById('copyCustomBtn');
+
+            copyCustomBtn.addEventListener('click', async function() {
+                const text = customTextarea.value.trim();
+                if (!text) {
+                    showToast('⚠️ Escribe algo antes de copiar');
+                    return;
+                }
+                const success = await copyToClipboard(text);
+                if (success) {
+                    const label = copyCustomBtn.querySelector('.btn-label');
+                    const originalLabel = label.textContent;
+                    const svg = copyCustomBtn.querySelector('svg');
+                    const originalSvgHTML = svg.outerHTML;
+
+                    copyCustomBtn.classList.add('copied-state');
+                    label.textContent = '¡Copiado!';
+                    svg.outerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                    showToast('Mensaje personalizado copiado ✓');
+
+                    setTimeout(() => {
+                        copyCustomBtn.classList.remove('copied-state');
+                        label.textContent = originalLabel;
+                        copyCustomBtn.querySelector('svg').outerHTML = originalSvgHTML;
+                    }, 1500);
+                } else {
+                    showToast('⚠️ No se pudo copiar');
+                }
+            });
+
+            // Soporte para teclado en botones
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    const button = document.activeElement;
+                    if (button && button.classList.contains('btn-copy') && !button.classList.contains('copied-state')) {
+                        const card = button.closest('.card');
+                        if (card) {
+                            e.preventDefault();
+                            handleCardCopy(card, button);
+                        }
+                    }
+                }
+            });
+
+            console.log('🚀 QuickReply Vinted mejorado – búsqueda y mensaje personalizado activados.');
+        })();
+    </script>
+</body>
+</html>
